@@ -50,10 +50,22 @@ function tris:new(geometry,origin,scale)
  self.scale=scale
  self.origin=origin
  function self:render()
-  for quad in all(self.geometry) do
+		for quad=2,count(self.geometry) do
+			if quad > 1 and average(self.geometry[quad],self.origin) > average(self.geometry[quad-1],self.origin) then
+				geom=self.geometry[quad]
+				self.geometry[quad]=self.geometry[quad-1]
+				self.geometry[quad-1]=geom
+			else if quad+1 < count(self.geometry) and average(self.geometry[quad],self.origin) < average(self.geometry[quad+1],self.origin) then
+				geom=self.geometry[quad]
+				self.geometry[quad]=self.geometry[quad+1]
+				self.geometry[quad+1]=geom
+			end		
+		end
+		for quad in all(self.geometry) do
 		 viewpixel(quad,self.origin,self.scale)
-	 end
- end
+		end
+	end
+	end
  return self
 end
 
@@ -61,6 +73,15 @@ texture={size={},sheet={}}
 
 function texture:new(size,sheet)
 	
+end
+
+function average(quad,origin)
+	tripos={}
+	for i=1,3 do
+ 	tripos[i]=((quad[1][i]+quad[2][i]+quad[3][i])/3.0)+origin[i]
+  tripos[i]*=tripos[i]
+ end
+ return (sqrt(tripos[1]+tripos[2])*sqrt(tripos[1]+tripos[2]))*tripos[3]
 end
 
 --temporary geometry
@@ -92,18 +113,18 @@ tri={}
 tri[1]={{5,0,1},{0,20,1},{10,20,1},6}
 ]]--
 cube={}
-cube[11]={{-5,-5,1},{5,-5,1},{-5,5,1},7}
-cube[12]={{5,-5,1},{5,5,1},{-5,5,1},7}
-cube[10]={{-5,-5,1},{-5,-5,1.08},{-5,5,1},5}
-cube[9]={{-5,-5,1.08},{-5,5,1.08},{-5,5,1},5}
-cube[8]={{5,-5,1},{5,-5,1.08},{5,5,1},5}
-cube[7]={{5,-5,1.08},{5,5,1.08},{5,5,1},5}
-cube[6]={{-5,5,1},{-5,5,1.08},{5,5,1},5}
-cube[5]={{-5,5,1.08},{5,5,1.08},{5,5,1},5}
-cube[4]={{-5,-5,1},{-5,-5,1.08},{5,-5,1},5}
-cube[3]={{-5,-5,1.08},{5,-5,1.08},{5,-5,1},5}
-cube[2]={{-5,-5,1.08},{5,-5,1.08},{-5,5,1.08},6}
-cube[1]={{5,-5,1.08},{5,5,1.08},{-5,5,1.08},6}
+cube[1]={{-5,-5,1},{5,-5,1},{-5,5,1},7}
+cube[2]={{5,-5,1},{5,5,1},{-5,5,1},7}
+cube[4]={{-5,-5,1},{-5,-5,1.08},{-5,5,1},6}
+cube[3]={{-5,-5,1.08},{-5,5,1.08},{-5,5,1},6}
+cube[5]={{5,-5,1},{5,-5,1.08},{5,5,1},6}
+cube[6]={{5,-5,1.08},{5,5,1.08},{5,5,1},6}
+cube[7]={{-5,5,1},{-5,5,1.08},{5,5,1},5}
+cube[8]={{-5,5,1.08},{5,5,1.08},{5,5,1},5}
+cube[10]={{-5,-5,1},{-5,-5,1.08},{5,-5,1},6}
+cube[9]={{-5,-5,1.08},{5,-5,1.08},{5,-5,1},6}
+cube[12]={{-5,-5,1.08},{5,-5,1.08},{-5,5,1.08},7}
+cube[11]={{5,-5,1.08},{5,5,1.08},{-5,5,1.08},7}
 
 --rendering
 --joystick=tris:new(joystick,{-36,20,0},{0.4,0.4,0.64})
