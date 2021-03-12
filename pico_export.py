@@ -28,9 +28,9 @@ class PicoGeometry(bpy.types.Operator):
             for vertex in edge.vertices:
                 geometry += "{" + str(vertices[vertex].co[0]) + "," + str(vertices[vertex].co[1]) + "," + str(vertices[vertex].co[2]) + "}"
             if edge.index < len(export_object.edges) - 1:
-                geometry += "},\n"
+                geometry += ",1},\n"
             else:
-                geometry += "}"
+                geometry += ",1}"
         geometry += "}"
         
         bpy.data.texts.new("Pico Export").write(geometry)
